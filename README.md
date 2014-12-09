@@ -1,3 +1,5 @@
+Camera-to-Arm-Calibration
+=========================
 
 The method operates by finding the parameters that minimize the difference in the position of the checkerboard given by the camera and arm when it is projected into the cameras coordinate system.
  
