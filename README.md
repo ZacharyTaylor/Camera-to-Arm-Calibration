@@ -3,7 +3,9 @@ Camera-to-Arm-Calibration
 
 The method operates by finding the parameters that minimize the difference in the position of the checkerboard given by the camera and arm when it is projected into the cameras coordinate system.
  
+ 
 Calibration guide
+=================
 
 1) Download the code
 
@@ -29,6 +31,8 @@ Calibration guide
 		TEnd- 4x4 arm base to end effector transformation matrix, distances in m
 		cameraParams- camera parameters objects containing distortions and camera matrix
 	
-8) The Calibration is complete. See "help CalCamArm" for more details and optional inputs / outputs
+8) The Calibration should be complete. For more details and optional inputs / outputs run
+
+	help CalCamArm
 
 Any issues / comments / ideas / etc give me an email at z.taylor@acfr.usyd.edu.au
