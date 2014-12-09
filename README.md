@@ -7,7 +7,9 @@ Calibration guide
 
 1) Download the code
 
-2) Obtain a checkerboard, Matlab can generate one by running I = checkerboard(200,10,7); I = I(1:size(I,1)/2,1:size(I,2)/2); imsave(imshow(I));
+2) Obtain a checkerboard, Matlab can generate one by running 
+	
+	I = checkerboard(200,10,7); I = I(1:size(I,1)/2,1:size(I,2)/2); imsave(imshow(I));
 
 3) Rigidly mount the checkerboard to the robots end effector
 
@@ -17,13 +19,15 @@ Calibration guide
 
 6) Repeat steps 4-5 at least 10 times (20+ times is recommended)
 
-7) Run [TBase, TEnd, cameraParams] = CalCamArm(imageFolder, armMat, squareSize)
-	imageFolder- folder containing images
-	armMat- matrix holding arm base to end effector transformations
-	squareSize- width of a square on the chessboard in mm
-	TBase- 4x4 camera to arm base transformation matrix, distances in m
-	TEnd- 4x4 arm base to end effector transformation matrix, distances in m
-	cameraParams- camera parameters objects containing distortions and camera matrix
+7) Run the calibration code
+
+	[TBase, TEnd, cameraParams] = CalCamArm(imageFolder, armMat, squareSize)
+		imageFolder- folder containing images
+		armMat- matrix holding arm base to end effector transformations
+		squareSize- width of a square on the chessboard in mm
+		TBase- 4x4 camera to arm base transformation matrix, distances in m
+		TEnd- 4x4 arm base to end effector transformation matrix, distances in m
+		cameraParams- camera parameters objects containing distortions and camera matrix
 	
 8) The Calibration is complete. See "help CalCamArm" for more details and optional inputs / outputs
 
