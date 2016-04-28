@@ -160,7 +160,7 @@ for i = 1:2:(nargin-3)
             baseEst = double(varargin{i+1});
         case 'gripest'
             validateattributes(varargin{i+1}, {'numeric'},{'size',[4,4]});
-            baseEst = double(varargin{i+1});
+            endEst = double(varargin{i+1});
         otherwise
             error('%s is not a valid option',varargin{i+1})
     end
