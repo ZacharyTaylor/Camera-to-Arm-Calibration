@@ -270,6 +270,64 @@ if(pixelErr > 10)
         'If it still will not work, email me a z.taylor@acfr.usyd.edu.au\n'], pixelErr);
 end
 
+if(saveImages)
+    if(verbose)
+        fprintf('Saving images with initial guess and result\n');
+    end
+
+    [~, projectedGuess, projectedInital] = ProjectError(points,...
+        cameraParams, worldPoints, armPose, inliers, inital);
+    [~, projectedSolution, projectedXYZSol] = ProjectError(points,...
+        cameraParams, worldPoints, armPose, inliers, solution);
+
+    mkdir(savePath)
+
+    image_indecies = find(imagesUsed);
+    for i = 1:size(projectedGuess,3)
+       f = figure(1);
+       imshow(imread(imageFiles{image_indecies(i)})); 
+       hold on; 
+       p1 = scatter(points(:,1,i),points(:,2,i),'ro');
+       p2 = scatter(projectedGuess(:,1,i),projectedGuess(:,2,i),'b+');
+       p3 = scatter(projectedSolution(:,1,i),projectedSolution(:,2,i),'gd');
+
+       p4 = scatter(projectedInital(1,1,i),projectedInital(1,2,i),'c^');
+       p5 = scatter(projectedInital(5,1,i),projectedInital(5,2,i),'cv');
+       p6 = scatter(projectedInital(9,1,i),projectedInital(9,2,i),'c<');
+
+       p7 = scatter(projectedXYZSol(1,1,i),projectedXYZSol(1,2,i),'m^');
+       p8 = scatter(projectedXYZSol(5,1,i),projectedXYZSol(5,2,i),'mv');
+       p9 = scatter(projectedXYZSol(9,1,i),projectedXYZSol(9,2,i),'m<');
+
+       color = 'rgb';
+       for j = 2:4
+           for k = 0:2
+                plot([projectedInital(4*k+1,1,i),projectedInital(4*k+j,1,i)],...
+                    [projectedInital(4*k+1,2,i),projectedInital(4*k+j,2,i)],color(j-1));
+           end
+       end
+
+       for j = 2:4
+           for k = 0:2
+                plot([projectedXYZSol(4*k+1,1,i),projectedXYZSol(4*k+j,1,i)],...
+                    [projectedXYZSol(4*k+1,2,i),projectedXYZSol(4*k+j,2,i)],color(j-1));
+           end
+       end
+
+       legend([p1, p2, p3, p4, p5, p6, p7, p8, p9], 'detected', 'guess',...
+           'solution','base initial guess','tcp initial guess',...
+           'grid initial guess', 'base solution', 'tcp solution',...
+           'grid solution')
+       annotation('textbox', [0,0,.10,.10], 'String',...
+           'Red is x, Green is y, Blue is z', 'FitBoxToText','on',...
+           'BackgroundColor','white','Color','red')
+       hold off
+       saveas(f, sprintf('%s/outputImage%i.png',savePath,i))
+    end
+    if(verbose)
+        fprintf('Done saving images\n');
+    end
+end
 %% Bootstrap
 if(errEst)
     bootSol = zeros(numBoot,length(inital));
