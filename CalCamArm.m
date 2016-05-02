@@ -182,6 +182,12 @@ for i = 1:length(imageFiles)
     imageFiles{i} = [imageFolder filesep imageFiles{i}];
 end
 
+%sort image files
+currPath = fileparts(mfilename('fullpath'));
+addpath([currPath '/sort_nat']);
+imageFiles = sort_nat(imageFiles);
+rmpath([currPath '/sort_nat']);
+
 if(verbose)
     fprintf('Extracting Chessboards\n');
 end
