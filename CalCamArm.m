@@ -158,7 +158,7 @@ for i = 1:2:(nargin-3)
         case 'baseest'
             validateattributes(varargin{i+1}, {'numeric'},{'size',[4,4]});
             baseEst = double(varargin{i+1});
-        case 'gripest'
+        case 'endEst'
             validateattributes(varargin{i+1}, {'numeric'},{'size',[4,4]});
             endEst = double(varargin{i+1});
         otherwise
