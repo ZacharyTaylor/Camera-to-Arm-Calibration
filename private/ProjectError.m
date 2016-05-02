@@ -1,4 +1,4 @@
-function [ err ] = ProjectError( points, cameraParams, worldPoints, armPose, inliers, est )
+function [ err, proj, projEst ] = ProjectError( points, cameraParams, worldPoints, armPose, inliers, est )
 %PROJERROR Projects checkerboards into camera frame and finds error betwen
 %projected and actual position.
 %   Inputs-
@@ -15,6 +15,11 @@ function [ err ] = ProjectError( points, cameraParams, worldPoints, armPose, inl
 %
 %   Outputs -
 %   err- mean projection error of inliers in pixels
+%   proj- nx2xm matrix of the position of checkerboard corner n in image
+%       m. given as [x,y] as guessed by the est
+%   pojEst- 12x2xm matrix of the position of [base origin, basex, basey, 
+%           basez,tcp origin, tcp x, tcp y, tcp z, grid x, grid y, grid z] in image
+%       m. given as [x,y] as guessed by the est
 
 %extract transforms from estimate
 baseT = V2T(est(1:6));
@@ -27,6 +32,9 @@ worldPoints = [squareSize.*worldPoints, zeros(size(worldPoints,1),1), ones(size(
 %get camera matrix
 K = cameraParams.IntrinsicMatrix';
 
+proj = zeros(size(points));
+projEst = zeros(12,2,size(points,3));
+
 %get distortion parameters
 p = cameraParams.TangentialDistortion;
 if(length(p) < 2)
@@ -37,12 +45,19 @@ if(length(k) < 3)
     k(3) = 0;
 end
 
+axis_length = .1;
+axis = [0,0,0,1;
+        axis_length, 0, 0, 1;
+        0, axis_length, 0, 1;
+        0, 0, axis_length, 1]';
 err = nan(size(points,1),size(points,3));
 %loop over each armPose
 for i = 1:size(armPose,3)
     %transform chessboard points from the world into the image
-    projected = ([1,0,0,0;0,1,0,0;0,0,1,0]*baseT*armPose(:,:,i)*gripT*worldPoints)';
-
+    projected = [([1,0,0,0;0,1,0,0;0,0,1,0]*baseT*armPose(:,:,i)*gripT*worldPoints)';...
+                 ([1,0,0,0;0,1,0,0;0,0,1,0]*baseT*axis)';...
+                 ([1,0,0,0;0,1,0,0;0,0,1,0]*baseT*armPose(:,:,i)*axis)';...
+                 ([1,0,0,0;0,1,0,0;0,0,1,0]*baseT*armPose(:,:,i)*gripT*axis)'];
     x = projected(:,1)./projected(:,3);
     y = projected(:,2)./projected(:,3);
     r2 = x.^2 + y.^2;
@@ -59,9 +74,12 @@ for i = 1:size(armPose,3)
     projected = [xRD + xTD, yRD + yTD, ones(size(x,1),1)];
     projected = K*projected';
     projected = projected(1:2,:)';
-
+    
+    proj(:,:,i) = projected(1:end-12,:);
+    projEst(:,:,i) = projected(end-11:end,:);
+    
     %find error in projection
-    err(:,i) = sum((projected - points(:,:,i)).^2,2);
+    err(:,i) = sum((proj(:,:,i) - points(:,:,i)).^2,2);
 end
 
 %remove invalid points
