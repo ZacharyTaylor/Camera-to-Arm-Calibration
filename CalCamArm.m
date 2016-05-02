@@ -62,6 +62,13 @@ function [ TBase, TEnd, cameraParams, TBaseStd, TEndStd, pixelErr ] = CalCamArm(
 %       4x4 matrix giving the initial estimate for the end effector to 
 %       checekerboard tform
 %
+%   saveImages - true (default) | logical scalar
+%       if true, save each image with guess poses and final calculated
+%       poses displayed
+%
+%   savePath - 'output' (default) | string
+%       where to save output images if saveImages is set to true
+%
 %--------------------------------------------------------------------------
 %   Outputs:
 %--------------------------------------------------------------------------
