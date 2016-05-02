@@ -122,6 +122,8 @@ numBoot = 100;
 cameraParams = [];
 baseEst = eye(4);
 endEst = eye(4);
+saveImages = true;
+savePath = 'output';
 
 %check number of inputs
 if(mod(nargin-3,2))
@@ -168,6 +170,12 @@ for i = 1:2:(nargin-3)
         case 'gripest'
             validateattributes(varargin{i+1}, {'numeric'},{'size',[4,4]});
             endEst = double(varargin{i+1});
+        case 'saveImages'
+            validateattributes(varargin{i+1}, {'logical'},{'scalar'});
+            saveImages = varargin{i+1};
+        case 'savePath'
+            validateattributes(varargin{i+1}, {'char'},{});
+            savePath = varargin{i+1};
         otherwise
             error('%s is not a valid option',varargin{i+1})
     end
