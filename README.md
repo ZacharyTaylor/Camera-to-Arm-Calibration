@@ -3,8 +3,9 @@ Camera-to-Arm-Calibration
 
 The method operates by finding the parameters that minimize the difference in the position of the checkerboard given by the camera and arm when it is projected into the cameras coordinate system.
 
+A ROS extension to this toolbox that removes the need for manual extraction of data has been made by Haitham El-Hussieny and can be found at https://github.com/elhussieny/kuka_camera_calib
+
 The details of how the calibration works are given in Camera to Robotic Arm Calibration.pdf
- 
  
 Calibration guide
 =================
