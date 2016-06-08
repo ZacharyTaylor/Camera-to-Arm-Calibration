@@ -170,10 +170,10 @@ for i = 1:2:(nargin-3)
         case 'endest'
             validateattributes(varargin{i+1}, {'numeric'},{'size',[4,4]});
             endEst = double(varargin{i+1});
-        case 'saveImages'
+        case 'saveimages'
             validateattributes(varargin{i+1}, {'logical'},{'scalar'});
             saveImages = varargin{i+1};
-        case 'savePath'
+        case 'savepath'
             validateattributes(varargin{i+1}, {'char'},{});
             savePath = varargin{i+1};
         otherwise
